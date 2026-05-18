@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akustik Kelautan — Dasar-Dasar Ilmu Suara di Laut</title>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg:          #f4f7f5;
+      --surface:     #ffffff;
+      --surface-2:   #eef4f1;
+      --border:      #d4e4dc;
+      --teal:        #2d7d6f;
+      --teal-light:  #4aaa96;
+      --teal-pale:   #e0f2ee;
+      --amber:       #c07b2a;
+      --amber-pale:  #fdf3e3;
+      --text:        #1e2d28;
+      --text-mid:    #3d5248;
+      --text-soft:   #6b8578;
+      --navy:        #1a3040;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* NAVBAR */
+    nav.topnav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(244,247,245,0.93);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 0.8rem 2rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .nav-brand {
+      font-family: 'DM Mono', monospace; font-size: 0.78rem;
+      color: var(--teal); letter-spacing: 0.12em; text-transform: uppercase; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 1.4rem; list-style: none; }
+    .nav-links a { font-size: 0.82rem; color: var(--text-soft); text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--teal); }
+
+    /* HERO */
+    .hero {
+      background: var(--navy); color: #fff;
+      padding: 5rem 2rem 4rem; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .hero::before {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(45,125,111,0.45) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 20% 30%, rgba(74,170,150,0.15) 0%, transparent 60%);
+    }
+    .sonar { position: absolute; bottom: -60px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; pointer-events: none; }
+    .sonar-ring { position: absolute; border-radius: 50%; border: 1px solid rgba(74,170,150,0.3); top: 50%; left: 50%; transform: translate(-50%,-50%) scale(0); animation: sonarPulse 4s ease-out infinite; }
+    .sonar-ring:nth-child(1) { width:80px;  height:80px;  animation-delay: 0s;   }
+    .sonar-ring:nth-child(2) { width:160px; height:160px; animation-delay: 0.8s; }
+    .sonar-ring:nth-child(3) { width:260px; height:260px; animation-delay: 1.6s; }
+    .sonar-ring:nth-child(4) { width:370px; height:370px; animation-delay: 2.4s; }
+    @keyframes sonarPulse {
+      0%   { transform: translate(-50%,-50%) scale(0.2); opacity: 0.8; }
+      100% { transform: translate(-50%,-50%) scale(1);   opacity: 0;   }
+    }
+    .hero-content { position: relative; max-width: 720px; margin: 0 auto; }
+    .hero-tag {
+      display: inline-block;
+      background: rgba(74,170,150,0.25); border: 1px solid rgba(74,170,150,0.4); color: #a8e6db;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase;
+      padding: 0.35rem 0.9rem; border-radius: 2px; margin-bottom: 1.4rem;
+    }
+    .hero h1 {
+      font-family: 'Merriweather', serif; font-size: clamp(2rem, 5.5vw, 3.4rem);
+      font-weight: 700; line-height: 1.2; color: #f0f8f6; margin-bottom: 1.2rem;
+    }
+    .hero h1 em { font-style: italic; color: #7dd4c8; }
+    .hero-desc { font-size: 1.05rem; color: rgba(240,248,246,0.72); max-width: 560px; margin: 0 auto 2rem; line-height: 1.75; }
+    .hero-meta {
+      display: flex; align-items: center; justify-content: center; gap: 1.8rem; flex-wrap: wrap;
+      font-family: 'DM Mono', monospace; font-size: 0.72rem; color: rgba(240,248,246,0.5); letter-spacing: 0.08em;
+    }
+    .hero-meta span::before { content: '· '; }
+    .hero-meta span:first-child::before { content: ''; }
+
+    /* LAYOUT */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 1.5rem; }
+
+    /* TABLE OF CONTENTS */
+    .toc {
+      background: var(--teal-pale); border: 1px solid var(--border);
+      border-left: 4px solid var(--teal); border-radius: 4px;
+      padding: 1.6rem 2rem; margin: 3rem 0 2rem;
+    }
+    .toc h3 { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--teal); margin-bottom: 1rem; }
+    .toc ol { padding-left: 1.4rem; counter-reset: toc; list-style: none; }
+    .toc ol li { counter-increment: toc; padding: 0.28rem 0; font-size: 0.95rem; }
+    .toc ol li::before { content: counter(toc, decimal-leading-zero) ". "; font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--teal-light); margin-right: 0.4rem; }
+    .toc a { color: var(--text-mid); text-decoration: none; border-bottom: 1px dashed var(--border); transition: color 0.2s, border-color 0.2s; }
+    .toc a:hover { color: var(--teal); border-color: var(--teal); }
+
+    /* SECTION */
+    .section { padding: 3rem 0 1rem; }
+    h2.sec-h { font-family: 'Merriweather', serif; font-size: clamp(1.45rem, 3.5vw, 1.9rem); font-weight: 700; color: var(--navy); line-height: 1.3; margin-bottom: 1.2rem; display: flex; align-items: flex-start; gap: 0.8rem; }
+    h2.sec-h .sec-num { font-family: 'DM Mono', monospace; font-size: 0.78rem; font-weight: 500; color: var(--teal-light); background: var(--teal-pale); border: 1px solid var(--border); padding: 0.2rem 0.5rem; border-radius: 2px; margin-top: 0.3rem; flex-shrink: 0; }
+    h3.sub-h { font-family: 'Merriweather', serif; font-size: 1.12rem; font-style: italic; color: var(--teal); margin: 2rem 0 0.7rem; }
+
+    /* BODY TEXT */
+    .article p { font-family: 'DM Sans', sans-serif; font-size: 1rem; line-height: 1.85; color: var(--text-mid); margin-bottom: 1.1rem; }
+    .article p strong { color: var(--text); font-weight: 600; }
+    .article p em { color: var(--teal); font-style: italic; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 2.5rem 0; }
+
+    /* CARDS */
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.1rem; margin: 2rem 0; }
+    .info-card { background: var(--surface); border: 1px solid var(--border); border-top: 3px solid var(--teal-light); border-radius: 4px; padding: 1.3rem 1.2rem; transition: box-shadow 0.25s, transform 0.2s; }
+    .info-card:hover { box-shadow: 0 6px 24px rgba(45,125,111,0.1); transform: translateY(-2px); }
+    .info-card .card-icon { font-size: 1.6rem; margin-bottom: 0.6rem; display: block; }
+    .info-card .card-title { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.4rem; }
+    .info-card p { font-size: 0.9rem !important; line-height: 1.65 !important; margin: 0 !important; color: var(--text-soft) !important; }
+
+    /* CALLOUT */
+    .callout { background: var(--teal-pale); border: 1px solid var(--border); border-left: 4px solid var(--teal); border-radius: 0 4px 4px 0; padding: 1.3rem 1.6rem; margin: 2rem 0; }
+    .callout.amber { background: var(--amber-pale); border-left-color: var(--amber); }
+    .callout-label { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.5rem; }
+    .callout.amber .callout-label { color: var(--amber); }
+    .callout p { font-size: 0.97rem !important; margin: 0 !important; color: var(--text-mid) !important; line-height: 1.8 !important; }
+    .callout p + p { margin-top: 0.6rem !important; }
+
+    /* BLOCKQUOTE */
+    blockquote { margin: 2.2rem 0; padding: 1.2rem 1.8rem; border-left: 3px solid var(--teal-light); background: var(--surface); border-radius: 0 4px 4px 0; }
+    blockquote p { font-family: 'Merriweather', serif !important; font-style: italic; font-size: 1.05rem !important; color: var(--navy) !important; line-height: 1.7 !important; }
+    blockquote cite { display: block; margin-top: 0.6rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--text-soft); letter-spacing: 0.06em; }
+
+    /* TABLE */
+    .table-wrap { overflow-x: auto; margin: 2rem 0; }
+    table.comp-table { width: 100%; border-collapse: collapse; font-size: 0.93rem; }
+    table.comp-table caption { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); text-align: left; padding-bottom: 0.6rem; }
+    table.comp-table thead th { background: var(--navy); color: #e8f4f1; font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.06em; padding: 0.9rem 1.1rem; text-align: left; font-weight: 500; }
+    table.comp-table tbody td { padding: 0.8rem 1.1rem; border-bottom: 1px solid var(--border); color: var(--text-mid); vertical-align: top; line-height: 1.65; }
+    table.comp-table tbody tr:nth-child(even) td { background: var(--surface-2); }
+    table.comp-table tbody tr:hover td { background: var(--teal-pale); }
+    table.comp-table .td-label { font-weight: 600; color: var(--text); }
+
+    /* PARAM CARDS */
+    .param-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.2rem; margin: 2rem 0; }
+    .param-card { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+    .param-head { background: var(--navy); color: #e8f4f1; padding: 1rem 1.2rem; display: flex; align-items: center; gap: 0.7rem; }
+    .param-emoji { font-size: 1.4rem; }
+    .param-name { font-family: 'Merriweather', serif; font-size: 1rem; font-weight: 700; }
+    .param-sym { font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--teal-light); margin-left: auto; }
+    .param-body { padding: 1.1rem 1.2rem; }
+    .param-body p { font-size: 0.92rem !important; line-height: 1.75 !important; color: var(--text-mid) !important; margin-bottom: 0.7rem !important; }
+    .param-formula { font-family: 'DM Mono', monospace; font-size: 0.85rem; background: var(--teal-pale); border: 1px solid var(--border); border-radius: 3px; padding: 0.5rem 0.8rem; color: var(--teal); display: block; margin-top: 0.5rem; }
+
+    /* FIGURE */
+    figure.art-fig { margin: 2.5rem 0; }
+    .fig-visual { width: 100%; height: 200px; background: linear-gradient(135deg, var(--navy) 0%, #1a5c4e 50%, #2d7d6f 100%); border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6rem; position: relative; overflow: hidden; }
+    .fig-visual::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(90deg, transparent, transparent 18px, rgba(74,170,150,0.08) 18px, rgba(74,170,150,0.08) 19px); }
+    .fig-label { font-family: 'DM Mono', monospace; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(200,240,235,0.7); position: relative; }
+    .fig-icon { font-size: 3rem; position: relative; filter: drop-shadow(0 2px 12px rgba(0,0,0,0.4)); }
+    figcaption { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.05em; color: var(--text-soft); text-align: center; margin-top: 0.6rem; padding: 0 1rem; }
+
+    /* SPEED BARS */
+    .speed-bar-wrap { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1.6rem; margin: 2rem 0; }
+    .speed-bar-wrap h4 { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--teal); margin-bottom: 1.2rem; }
+    .speed-item { margin-bottom: 1.2rem; }
+    .speed-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 500; color: var(--text); margin-bottom: 0.4rem; }
+    .speed-label span { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--teal-light); }
+    .speed-track { height: 10px; background: var(--surface-2); border-radius: 5px; overflow: hidden; }
+    .speed-fill { height: 100%; border-radius: 5px; animation: fillBar 1.4s cubic-bezier(0.4,0,0.2,1) both; }
+    .speed-fill.udara  { background: linear-gradient(90deg, #c07b2a, #e0a050); width: 24%; animation-delay: 0.1s; }
+    .speed-fill.laut   { background: linear-gradient(90deg, #2d7d6f, #4aaa96); width: 100%; animation-delay: 0.4s; }
+    .speed-fill.solid  { background: linear-gradient(90deg, #1a3040, #3d6878); width: 85%; animation-delay: 0.7s; }
+    @keyframes fillBar { from { width: 0 !important; } }
+
+    /* REFERENCES */
+    .references { background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; padding: 2rem; margin: 3rem 0 1rem; }
+    .references h3 { font-family: 'Merriweather', serif; font-size: 1.15rem; color: var(--navy); margin-bottom: 1.2rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
+    .references ol { padding-left: 1.4rem; }
+    .references li { font-size: 0.875rem; line-height: 1.75; color: var(--text-mid); margin-bottom: 0.8rem; }
+    .references a { color: var(--teal); text-decoration: none; }
+    .references a:hover { text-decoration: underline; }
+    .ref-year { font-family: 'DM Mono', monospace; font-size: 0.72rem; background: var(--teal-pale); color: var(--teal); border: 1px solid var(--border); padding: 0.1rem 0.4rem; border-radius: 2px; margin-left: 0.3rem; }
+
+    /* FOOTER */
+    footer { background: var(--navy); color: rgba(220,240,236,0.5); text-align: center; padding: 2.5rem 1rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; margin-top: 3rem; }
+    footer strong { color: var(--teal-light); }
+
+    /* SCROLL REVEAL */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.65s ease, transform 0.65s ease; }
+    .reveal.vis { opacity: 1; transform: none; }
+
+    /* RESPONSIVE */
+    @media (max-width: 600px) {
+      nav.topnav { padding: 0.7rem 1rem; }
+      .nav-links { display: none; }
+      .hero { padding: 3.5rem 1.2rem 3rem; }
+      .container { padding: 0 1rem; }
+      .param-grid, .card-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="topnav">
+  <a href="#" class="nav-brand">🌊 Akustik Kelautan</a>
+  <ul class="nav-links">
+    <li><a href="#pengertian">Pengertian</a></li>
+    <li><a href="#prinsip">Prinsip Gelombang</a></li>
+    <li><a href="#perbedaan">Udara vs Laut</a></li>
+    <li><a href="#parameter">Parameter</a></li>
+    <li><a href="#referensi">Referensi</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="sonar">
+    <div class="sonar-ring"></div>
+    <div class="sonar-ring"></div>
+    <div class="sonar-ring"></div>
+    <div class="sonar-ring"></div>
+  </div>
+  <div class="hero-content">
+    <span class="hero-tag">Dasar Ilmu Kelautan</span>
+    <h1>Akustik Kelautan:<br><em>Ilmu Perambatan Suara di Air Laut</em></h1>
+    <p class="hero-desc">
+      Memahami bagaimana gelombang suara merambat, berinteraksi, dan dimanfaatkan
+      di dalam medium lautan &mdash; dari prinsip fisika dasar hingga aplikasi teknologi.
+    </p>
+    <div class="hero-meta">
+      <span><strong>Aqila Widya Ningrum<strong></span>
+      <span><strong>08051382328107<strong></span>
+      <span><strong>WEBGIS HTML<strong></span>
+    </div>
+  </div>
+</header>
+
+<!-- MAIN -->
+<main>
+  <div class="container">
+
+    <!-- TABLE OF CONTENTS -->
+    <nav class="toc reveal" aria-label="Daftar Isi">
+      <h3>&#128203; Daftar Isi</h3>
+      <ol>
+        <li><a href="#pengertian">Pengertian Akustik Kelautan</a></li>
+        <li><a href="#prinsip">Prinsip Gelombang Suara di Air</a></li>
+        <li><a href="#perbedaan">Perbedaan Propagasi Suara di Udara dan di Laut</a></li>
+        <li><a href="#parameter">Parameter Dasar Akustik</a></li>
+        <li><a href="#kesimpulan">Kesimpulan</a></li>
+        <li><a href="#referensi">Daftar Pustaka</a></li>
+      </ol>
+    </nav>
+
+    <div class="article">
+
+      <!-- 1. PENGERTIAN -->
+      <section class="section" id="pengertian">
+        <h2 class="sec-h reveal">
+          <span class="sec-num">01</span>
+          Pengertian Akustik Kelautan
+        </h2>
+
+        <p class="reveal">
+          <strong>Akustik kelautan</strong> (<em>ocean acoustics</em> atau <em>underwater acoustics</em>)
+          adalah cabang ilmu fisika terapan yang mempelajari produksi, transmisi, dan penerimaan
+          gelombang suara di dalam medium perairan laut. Ilmu ini menjadi fondasi berbagai teknologi
+          kelautan modern, mulai dari sonar militer, navigasi kapal selam, eksplorasi sumber daya
+          alam bawah laut, pemantauan perubahan iklim laut, hingga penelitian biologi kelautan
+          (Etter, 2022; Lurton, 2022).
+        </p>
+
+        <p class="reveal">
+          Tidak seperti gelombang elektromagnetik (cahaya, gelombang radio) yang sangat cepat mengalami
+          peredaman di dalam air, gelombang suara (gelombang mekanik) justru merambat jauh lebih
+          efisien di medium cair. Oleh karena itulah suara &mdash; bukan cahaya atau gelombang radio
+          &mdash; menjadi &ldquo;mata dan telinga&rdquo; utama di bawah laut (Ainslie, 2022).
+        </p>
+
+        <div class="callout reveal">
+          <div class="callout-label">&#128205; Definisi Kunci</div>
+          <p>
+            Akustik kelautan adalah studi ilmiah tentang gelombang bunyi di lautan, mencakup
+            mekanisme perambatan, pemantulan, hamburan, dan penyerapan suara oleh medium laut
+            beserta batas-batasnya (permukaan dan dasar laut), serta aplikasi teknisnya dalam
+            sistem deteksi dan komunikasi bawah air.
+          </p>
+        </div>
+
+        <h3 class="sub-h reveal">Sejarah dan Relevansi Modern</h3>
+        <p class="reveal">
+          Cikal bakal akustik kelautan modern dimulai dari kebutuhan militer pada Perang Dunia I,
+          ketika teknologi <strong>SONAR</strong> (<em>Sound Navigation And Ranging</em>) dikembangkan
+          untuk mendeteksi kapal selam musuh. Sejak saat itu, perkembangan ilmu ini sangat pesat.
+          Saat ini, akustik kelautan diaplikasikan secara luas dalam berbagai bidang:
+        </p>
+
+        <div class="card-grid reveal">
+          <div class="info-card">
+            <span class="card-icon">&#128674;</span>
+            <div class="card-title">Navigasi &amp; Pemetaan</div>
+            <p>Multibeam echosounder untuk pemetaan dasar laut tiga dimensi dengan presisi tinggi.</p>
+          </div>
+          <div class="info-card">
+            <span class="card-icon">&#128011;</span>
+            <div class="card-title">Biologi Laut</div>
+            <p>Pemantauan populasi ikan, paus, dan mamalia laut menggunakan teknik hidroakustik.</p>
+          </div>
+          <div class="info-card">
+            <span class="card-icon">&#127777;&#65039;</span>
+            <div class="card-title">Monitoring Iklim</div>
+            <p>Tomografi akustik laut untuk mengukur suhu dan arus massa air samudra secara massal.</p>
+          </div>
+          <div class="info-card">
+            <span class="card-icon">&#9981;</span>
+            <div class="card-title">Eksplorasi SDA</div>
+            <p>Seismik refleksi dan refraksi untuk mendeteksi cadangan minyak dan gas bumi bawah laut.</p>
+          </div>
+        </div>
+
+      </section>
+
+      <hr class="divider" />
+
+      <!-- 2. PRINSIP GELOMBANG -->
+      <section class="section" id="prinsip">
+        <h2 class="sec-h reveal">
+          <span class="sec-num">02</span>
+          Prinsip Gelombang Suara di Air
+        </h2>
+
+        <p class="reveal">
+          Suara adalah <strong>gelombang mekanik longitudinal</strong> &mdash; gelombang ini merambat
+          melalui kompresi dan peregangan partikel medium secara paralel dengan arah perambatan
+          energi. Di dalam air, partikel-partikel molekul air tidak berpindah tempat; mereka
+          berosilasi maju-mundur di sekitar posisi setimbangnya, meneruskan energi dari satu
+          partikel ke partikel berikutnya (Lurton, 2022).
+        </p>
+
+        <figure class="art-fig reveal">
+  <div class="fig-visual" style="padding:0; overflow:hidden; border-radius:12px;">
+    <canvas id="waveCanvas" width="700" height="320" 
+      style="width:100%; display:block; background:#0a2342; border-radius:12px 12px 0 0;">
+    </canvas>
+    <script>
+    (function(){
+      const canvas = document.getElementById('waveCanvas');
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+
+      function draw() {
+        const W = canvas.width, H = canvas.height;
+        ctx.clearRect(0, 0, W, H);
+
+        // Background
+        const bg = ctx.createLinearGradient(0,0,0,H);
+        bg.addColorStop(0,'#0a2342'); bg.addColorStop(1,'#0d3b6e');
+        ctx.fillStyle = bg; ctx.fillRect(0,0,W,H);
+
+        const rows=5, cols=18;
+        const cellW=W/cols, cellH=H/(rows+2);
+        const amplitude=16, wavelength=cols;
+        const offsetY = cellH*1.2;
+
+        // Highlight bands
+        for(let i=0;i<cols;i++){
+          const phase=(i/wavelength)*Math.PI*2 - t*2;
+          const val=Math.sin(phase);
+          const bx=i*cellW;
+          if(val>0.6){ ctx.fillStyle='rgba(255,80,80,0.08)'; ctx.fillRect(bx,offsetY-10,cellW,rows*cellH+20); }
+          else if(val<-0.6){ ctx.fillStyle='rgba(80,160,255,0.08)'; ctx.fillRect(bx,offsetY-10,cellW,rows*cellH+20); }
+        }
+
+        // Particles
+        for(let row=0;row<rows;row++){
+          const baseY=offsetY+row*cellH;
+          for(let col=0;col<cols;col++){
+            const baseX=col*cellW+cellW/2;
+            const phase=(col/wavelength)*Math.PI*2;
+            const disp=Math.sin(phase-t*2)*amplitude;
+            const px=baseX+disp, py=baseY;
+            const compress=Math.sin(phase-t*2);
+            const alpha=0.3+0.7*((compress+1)/2);
+            const radius=4+compress*1.5;
+
+            const grd=ctx.createRadialGradient(px,py,0,px,py,radius*2.5);
+            grd.addColorStop(0,`rgba(100,210,255,${alpha})`);
+            grd.addColorStop(1,`rgba(0,60,180,0)`);
+            ctx.beginPath(); ctx.arc(px,py,radius*2.5,0,Math.PI*2);
+            ctx.fillStyle=grd; ctx.fill();
+
+            ctx.beginPath(); ctx.arc(px,py,Math.max(2,radius),0,Math.PI*2);
+            ctx.fillStyle=`rgba(160,230,255,${alpha})`; ctx.fill();
+          }
+        }
+
+        // Arrow
+        const ay=offsetY+rows*cellH+12;
+        ctx.strokeStyle='rgba(255,200,50,0.9)'; ctx.lineWidth=2;
+        ctx.setLineDash([8,4]);
+        ctx.beginPath(); ctx.moveTo(20,ay); ctx.lineTo(W-30,ay); ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle='rgba(255,200,50,0.9)';
+        ctx.beginPath(); ctx.moveTo(W-18,ay); ctx.lineTo(W-34,ay-7); ctx.lineTo(W-34,ay+7); ctx.closePath(); ctx.fill();
+
+        // Labels
+        ctx.font='bold 11px Georgia,serif';
+        ctx.fillStyle='rgba(255,200,50,0.95)';
+        ctx.fillText('Arah Perambatan Gelombang', W/2-80, ay-6);
+
+        ctx.fillStyle='rgba(255,130,130,0.95)';
+        ctx.fillText('RAPATAN', W*0.18, offsetY-14);
+        ctx.fillStyle='rgba(130,200,255,0.95)';
+        ctx.fillText('RENGGANGAN', W*0.55, offsetY-14);
+
+        ctx.fillStyle='rgba(255,255,255,0.85)';
+        ctx.font='bold 13px Georgia,serif';
+        ctx.fillText('Gelombang Suara Longitudinal di Air', W/2-130, 20);
+        ctx.font='11px Georgia,serif';
+        ctx.fillStyle='rgba(160,210,255,0.75)';
+        ctx.fillText('Partikel bergerak sejajar arah gelombang (maju-mundur)', W/2-145, 36);
+
+        t += 0.025;
+        requestAnimationFrame(draw);
+      }
+      draw();
+    })();
+    </script>
+  </div>
+  <figcaption>
+    Gambar 1. Ilustrasi gelombang longitudinal yang merambat di dalam medium air laut.
+    (Adaptasi dari: Lurton, X., 2022. <em>An Introduction to Underwater Acoustics.</em> Springer.)
+  </figcaption>
+</figure>
+
+        <h3 class="sub-h reveal">Kecepatan Suara di Laut</h3>
+        <p class="reveal">
+          Kecepatan suara di air laut tidak konstan &mdash; ia dipengaruhi oleh tiga faktor utama:
+          <strong>suhu (T)</strong>, <strong>salinitas (S)</strong>, dan <strong>tekanan/kedalaman (Z)</strong>.
+          Persamaan empiris yang paling umum digunakan hingga saat ini adalah persamaan Mackenzie
+          yang telah divalidasi secara luas:
+        </p>
+
+        <div class="callout reveal">
+          <div class="callout-label">&#128208; Persamaan Kecepatan Suara (Mackenzie, 1981)</div>
+          <p>
+            <strong>c = 1448.96 + 4.591T &minus; 0.05304T&sup2; + 0.0002374T&sup3; + 1.340(S&minus;35) + 0.01630Z</strong>
+          </p>
+          <p>
+            di mana: <em>T</em> = suhu (&deg;C), <em>S</em> = salinitas (ppt), <em>Z</em> = kedalaman (m), <em>c</em> = kecepatan suara (m/s).
+            Nilai rata-rata di laut tropis Indonesia: <strong>1.500&ndash;1.550 m/s</strong> (Etter, 2022).
+          </p>
+        </div>
+
+        <h3 class="sub-h reveal">Profil Kecepatan Suara (Sound Velocity Profile)</h3>
+        <p class="reveal">
+          Variasi kecepatan suara terhadap kedalaman menciptakan <em>Sound Velocity Profile</em> (SVP)
+          yang membagi kolom air laut menjadi beberapa lapisan dengan karakteristik akustik berbeda:
+        </p>
+
+        <div class="table-wrap reveal">
+          <table class="comp-table">
+            <caption>Tabel 1. Lapisan Kolom Air Berdasarkan Profil Kecepatan Suara</caption>
+            <thead>
+              <tr>
+                <th>Lapisan</th>
+                <th>Kedalaman</th>
+                <th>Karakteristik Dominan</th>
+                <th>Pengaruh terhadap Suara</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-label">Lapisan Permukaan (Mixed Layer)</td>
+                <td>0&ndash;200 m</td>
+                <td>Suhu hangat dan relatif homogen; dipengaruhi angin dan sinar matahari</td>
+                <td>Kecepatan suara tinggi (~1.520 m/s); perambatan suara relatif seragam</td>
+              </tr>
+              <tr>
+                <td class="td-label">Termoklin (Thermocline)</td>
+                <td>200&ndash;1.000 m</td>
+                <td>Suhu turun drastis seiring kedalaman</td>
+                <td>Kecepatan suara menurun; berperan sebagai "cermin" yang memantulkan suara</td>
+              </tr>
+              <tr>
+                <td class="td-label">Lapisan Dalam (Deep Layer)</td>
+                <td>&gt; 1.000 m</td>
+                <td>Suhu konstan rendah; tekanan hidrostatik dominan</td>
+                <td>Kecepatan suara meningkat kembali; terbentuk kanal SOFAR</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-h reveal">Kanal SOFAR</h3>
+        <p class="reveal">
+          Salah satu fenomena paling luar biasa dalam akustik kelautan adalah <strong>Kanal SOFAR</strong>
+          (<em>Sound Fixing And Ranging Channel</em>). Di kedalaman sekitar 700&ndash;1.200 m, terdapat
+          zona minimum kecepatan suara. Akibat refraksi, gelombang suara secara alami terperangkap
+          dan merambat sepanjang kanal ini dengan redaman sangat rendah &mdash; memungkinkan suara
+          berfrekuensi rendah merambat ribuan kilometer tanpa pantulan ke permukaan atau dasar laut
+          (Ainslie, 2022). Paus biru diduga memanfaatkan kanal ini untuk berkomunikasi jarak jauh.
+        </p>
+
+        <blockquote class="reveal">
+          <p>"Lautan adalah media akustik alami yang paling efisien di planet ini. Di kanal SOFAR,
+          gelombang suara dapat menempuh jarak dari Hawaii hingga California tanpa kehilangan
+          energi yang berarti."</p>
+          <cite>&mdash; Lurton, X. (2022). <em>An Introduction to Underwater Acoustics: Principles and Applications.</em> Springer, hal. 47.</cite>
+        </blockquote>
+
+      </section>
+
+      <hr class="divider" />
+
+      <!-- 3. PERBEDAAN -->
+      <section class="section" id="perbedaan">
+        <h2 class="sec-h reveal">
+          <span class="sec-num">03</span>
+          Perbedaan Propagasi Suara di Udara dan di Laut
+        </h2>
+
+        <p class="reveal">
+          Meskipun keduanya merupakan gelombang longitudinal yang mematuhi hukum fisika yang sama,
+          perilaku gelombang suara di udara dan di dalam air laut memiliki perbedaan yang sangat
+          mendasar. Perbedaan ini terutama disebabkan oleh perbedaan sifat fisik medium:
+          <strong>kerapatan</strong> (<em>density</em>) dan <strong>modulus bulk</strong>
+          yang sangat berbeda antara udara dan air (Ainslie, 2022).
+        </p>
+
+        <div class="speed-bar-wrap reveal">
+          <h4>&#9889; Perbandingan Kecepatan Suara di Berbagai Medium</h4>
+          <div class="speed-item">
+            <div class="speed-label">Udara (20&deg;C) <span>&plusmn; 343 m/s</span></div>
+            <div class="speed-track"><div class="speed-fill udara"></div></div>
+          </div>
+          <div class="speed-item">
+            <div class="speed-label">Air Laut (25&deg;C, 35 ppt) <span>&plusmn; 1.530 m/s</span></div>
+            <div class="speed-track"><div class="speed-fill laut"></div></div>
+          </div>
+          <div class="speed-item">
+            <div class="speed-label">Baja (sebagai referensi) <span>&plusmn; 5.100 m/s</span></div>
+            <div class="speed-track"><div class="speed-fill solid"></div></div>
+          </div>
+        </div>
+
+        <p class="reveal">
+          Suara merambat di air laut sekitar <strong>4,5 kali lebih cepat</strong> dibandingkan di
+          udara. Hal ini karena air bersifat jauh lebih tidak kompresibel (modulus bulk tinggi),
+          sehingga partikel-partikelnya bereaksi lebih cepat terhadap gangguan tekanan (Lurton, 2022).
+        </p>
+
+        <div class="table-wrap reveal">
+          <table class="comp-table">
+            <caption>Tabel 2. Perbandingan Komprehensif Propagasi Suara di Udara vs Air Laut</caption>
+            <thead>
+              <tr>
+                <th>Parameter</th>
+                <th>Di Udara</th>
+                <th>Di Air Laut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-label">Kecepatan Perambatan</td>
+                <td>~343 m/s (suhu kamar)</td>
+                <td>~1.450&ndash;1.560 m/s (bergantung suhu, salinitas, kedalaman)</td>
+              </tr>
+              <tr>
+                <td class="td-label">Densitas Medium</td>
+                <td>~1,2 kg/m&sup3; (sangat rendah)</td>
+                <td>~1.025 kg/m&sup3; (sekitar 854&times; lebih padat dari udara)</td>
+              </tr>
+              <tr>
+                <td class="td-label">Impedansi Akustik (Z)</td>
+                <td>~415 Pa&middot;s/m (sangat rendah)</td>
+                <td>~1,5 &times; 10&sup6; Pa&middot;s/m (sangat tinggi)</td>
+              </tr>
+              <tr>
+                <td class="td-label">Koefisien Penyerapan</td>
+                <td>Tinggi &mdash; frekuensi tinggi cepat terserap dalam jarak pendek</td>
+                <td>Sangat rendah &mdash; suara frekuensi rendah dapat merambat ribuan km</td>
+              </tr>
+              <tr>
+                <td class="td-label">Pengaruh Suhu</td>
+                <td>Meningkat ~0,6 m/s per &deg;C</td>
+                <td>Meningkat ~4,6 m/s per &deg;C (lebih sensitif)</td>
+              </tr>
+              <tr>
+                <td class="td-label">Pengaruh Tekanan</td>
+                <td>Sangat kecil, tidak signifikan</td>
+                <td>Signifikan &mdash; meningkat ~1,7 m/s per 100 m kedalaman</td>
+              </tr>
+              <tr>
+                <td class="td-label">Refraksi</td>
+                <td>Kecil, terutama akibat gradien suhu atmosfer</td>
+                <td>Sangat kompleks &mdash; membentuk kanal akustik (SOFAR), shadow zone</td>
+              </tr>
+              <tr>
+                <td class="td-label">Batas Perambatan</td>
+                <td>Permukaan tanah dan lapisan atmosfer</td>
+                <td>Permukaan laut (berbusa/bergelombang) dan dasar laut (sedimen, batuan)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout amber reveal">
+          <div class="callout-label">&#9888;&#65039; Implikasi Penting</div>
+          <p>
+            Perbedaan impedansi akustik yang sangat besar antara air dan udara (~99,9%) menyebabkan
+            hampir seluruh energi suara dipantulkan kembali saat melewati batas antarmuka udara&ndash;air.
+            Inilah mengapa kita tidak dapat mendengar aktivitas bawah laut dari permukaan tanpa alat
+            khusus, dan sebaliknya &mdash; suara di udara tidak dapat masuk ke dalam laut secara efisien
+            (Ainslie, 2022; Jensen et al., 2011).
+          </p>
+        </div>
+
+        <h3 class="sub-h reveal">Penyerapan dan Geometrical Spreading</h3>
+        <p class="reveal">
+          Intensitas suara melemah saat merambat melalui dua mekanisme utama:
+          <strong>(1) geometrical spreading</strong> &mdash; pelemahan akibat perluasan muka gelombang
+          secara geometris, dan <strong>(2) absorption</strong> &mdash; pelemahan akibat konversi
+          energi akustik menjadi panas karena gesekan viskos dan relaksasi kimia (terutama boric acid
+          dan magnesium sulfat di air laut). Di frekuensi rendah (&lt;100 Hz), absorpsi sangat kecil
+          sehingga perambatan jarak sangat jauh dimungkinkan (Etter, 2022).
+        </p>
+
+      </section>
+
+      <hr class="divider" />
+
+      <!-- 4. PARAMETER -->
+      <section class="section" id="parameter">
+        <h2 class="sec-h reveal">
+          <span class="sec-num">04</span>
+          Parameter Dasar Akustik
+        </h2>
+
+        <p class="reveal">
+          Untuk memahami dan menganalisis gelombang suara di laut, terdapat beberapa besaran fisika
+          fundamental yang harus dikuasai. Keempat parameter berikut saling berkaitan satu sama
+          lain melalui hubungan matematis yang jelas (Jensen et al., 2011; Lurton, 2022).
+        </p>
+
+        <div class="param-grid">
+
+          <div class="param-card reveal">
+            <div class="param-head">
+              <span class="param-emoji">&#12541;&#65038;</span>
+              <span class="param-name">Frekuensi</span>
+              <span class="param-sym">f [Hz]</span>
+            </div>
+            <div class="param-body">
+              <p>
+                Frekuensi adalah jumlah siklus gelombang lengkap yang terjadi per detik, diukur
+                dalam Hertz (Hz). Dalam akustik kelautan, rentang frekuensi sangat luas: frekuensi
+                <strong>sangat rendah (&lt;1 kHz)</strong> untuk komunikasi jarak jauh dan tomografi;
+                <strong>menengah (1&ndash;100 kHz)</strong> untuk sonar dan perikanan;
+                <strong>tinggi (&gt;100 kHz)</strong> untuk pencitraan resolusi tinggi.
+              </p>
+              <code class="param-formula">f = 1 / T &nbsp;&rarr;&nbsp; [Hz] = [siklus/detik]</code>
+            </div>
+          </div>
+
+          <div class="param-card reveal">
+            <div class="param-head">
+              <span class="param-emoji">&#128202;</span>
+              <span class="param-name">Amplitudo</span>
+              <span class="param-sym">A [Pa]</span>
+            </div>
+            <div class="param-body">
+              <p>
+                Amplitudo adalah simpangan maksimum tekanan dari posisi setimbang, berkaitan
+                langsung dengan <strong>tekanan akustik</strong> dalam Pascal (Pa).
+                Tingkat tekanan suara (<em>Sound Pressure Level / SPL</em>) dinyatakan dalam
+                desibel (dB) dengan referensi 1 &micro;Pa (standar bawah air). Nilai ini menentukan
+                seberapa &ldquo;keras&rdquo; suara yang dipancarkan atau diterima.
+              </p>
+              <code class="param-formula">SPL = 20 log&#8321;&#8320;(p / p&sub0;) &nbsp;[dB re 1 &micro;Pa]</code>
+            </div>
+          </div>
+
+          <div class="param-card reveal">
+            <div class="param-head">
+              <span class="param-emoji">&#8596;&#65039;</span>
+              <span class="param-name">Panjang Gelombang</span>
+              <span class="param-sym">&lambda; [m]</span>
+            </div>
+            <div class="param-body">
+              <p>
+                Panjang gelombang adalah jarak antara dua titik yang memiliki fase yang sama
+                dalam satu siklus gelombang. Nilai ini sangat menentukan <strong>resolusi</strong>
+                dan <strong>kemampuan penetrasi</strong> suara di dalam laut. Contoh: pada
+                frekuensi 10 kHz dengan kecepatan suara 1.500 m/s, panjang gelombang = 15 cm.
+                Objek lebih kecil dari &lambda;/2 tidak dapat dideteksi secara terpisah (Lurton, 2022).
+              </p>
+              <code class="param-formula">&lambda; = c / f &nbsp;[m]</code>
+            </div>
+          </div>
+
+          <div class="param-card reveal">
+            <div class="param-head">
+              <span class="param-emoji">&#9200;&#65039;</span>
+              <span class="param-name">Periode</span>
+              <span class="param-sym">T [s]</span>
+            </div>
+            <div class="param-body">
+              <p>
+                Periode adalah waktu yang dibutuhkan untuk menyelesaikan satu siklus gelombang
+                penuh. Periode merupakan kebalikan dari frekuensi. Bersama keempat parameter
+                ini, kecepatan perambatan suara (<em>c</em>) menjadi besaran penghubung yang
+                merangkai seluruh karakteristik gelombang dalam satu persamaan dasar akustik.
+              </p>
+              <code class="param-formula">T = 1/f &nbsp;&rarr;&nbsp; c = &lambda; &middot; f = &lambda; / T</code>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="table-wrap reveal">
+          <table class="comp-table">
+            <caption>Tabel 3. Contoh Nilai Parameter Akustik pada Berbagai Aplikasi Kelautan</caption>
+            <thead>
+              <tr>
+                <th>Aplikasi</th>
+                <th>Frekuensi (f)</th>
+                <th>Panjang Gelombang (&lambda;)</th>
+                <th>SPL Tipikal</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="td-label">Komunikasi paus biru</td>
+                <td>10&ndash;40 Hz</td>
+                <td>37,5&ndash;150 m</td>
+                <td>155&ndash;188 dB re 1 &micro;Pa</td>
+              </tr>
+              <tr>
+                <td class="td-label">Tomografi akustik laut</td>
+                <td>50&ndash;300 Hz</td>
+                <td>5&ndash;30 m</td>
+                <td>260 dB re 1 &micro;Pa (sumber)</td>
+              </tr>
+              <tr>
+                <td class="td-label">Sonar kapal selam</td>
+                <td>1&ndash;10 kHz</td>
+                <td>0,15&ndash;1,5 m</td>
+                <td>180&ndash;220 dB re 1 &micro;Pa</td>
+              </tr>
+              <tr>
+                <td class="td-label">Echosounder perikanan</td>
+                <td>38&ndash;200 kHz</td>
+                <td>0,75&ndash;3,9 cm</td>
+                <td>160&ndash;200 dB re 1 &micro;Pa</td>
+              </tr>
+              <tr>
+                <td class="td-label">Multibeam (pemetaan dasar laut)</td>
+                <td>100&ndash;400 kHz</td>
+                <td>0,38&ndash;1,5 cm</td>
+                <td>210&ndash;230 dB re 1 &micro;Pa</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout reveal">
+          <div class="callout-label">&#128161; Trade-off Fundamental</div>
+          <p>
+            Dalam akustik kelautan terdapat trade-off mendasar antara frekuensi, resolusi, dan
+            jangkauan: <strong>frekuensi tinggi</strong> memberikan resolusi spasial yang baik tetapi
+            cepat terserap sehingga jangkauan pendek; <strong>frekuensi rendah</strong> memberikan
+            jangkauan sangat jauh tetapi resolusi kasar. Pemilihan frekuensi operasional selalu
+            merupakan kompromi sesuai tujuan pengukuran (Etter, 2022).
+          </p>
+        </div>
+
+      </section>
+
+      <hr class="divider" />
+
+      <!-- 5. KESIMPULAN -->
+      <section class="section" id="kesimpulan">
+        <h2 class="sec-h reveal">
+          <span class="sec-num">05</span>
+          Kesimpulan
+        </h2>
+
+        <p class="reveal">
+          Akustik kelautan merupakan ilmu yang sangat fundamental dalam memahami dan
+          memanfaatkan lautan secara optimal. Prinsip dasar gelombang suara di air &mdash; yang
+          mencakup kecepatan rambat, refraksi, absorpsi, dan pembentukan kanal akustik &mdash;
+          berbeda secara signifikan dari perilaku suara di udara, terutama karena perbedaan
+          densitas dan kompresibilitas medium.
+        </p>
+
+        <p class="reveal">
+          Pemahaman mendalam tentang parameter dasar akustik (frekuensi, amplitudo, panjang
+          gelombang, dan periode) beserta keterkaitannya dengan kecepatan suara di laut menjadi
+          prasyarat mutlak bagi setiap ilmuwan dan praktisi kelautan yang berkaitan dengan sistem
+          sonar, monitoring lingkungan laut, maupun eksplorasi sumber daya alam bawah laut.
+          Seiring perubahan iklim yang mengubah suhu dan salinitas laut secara global, pemahaman
+          akustik kelautan juga semakin kritis sebagai alat pemantauan ekosistem lautan
+          (Ainslie, 2022; Etter, 2022).
+        </p>
+      </section>
+
+      <!-- REFERENSI -->
+      <section class="references reveal" id="referensi">
+        <h3>&#128218; Daftar Pustaka</h3>
+        <ol>
+          <li>
+            Ainslie, M. A. (2022).
+            <em>Principles of Sonar Performance Modelling</em> (2nd ed.).
+            Springer. ISBN 978-3-030-74563-7.
+            <span class="ref-year">2022</span>
+          </li>
+          <li>
+            Etter, P. C. (2022).
+            <em>Underwater Acoustic Modeling and Simulation</em> (5th ed.).
+            CRC Press / Taylor &amp; Francis.
+            <a href="https://doi.org/10.1201/9781003129226" target="_blank">https://doi.org/10.1201/9781003129226</a>
+            <span class="ref-year">2022</span>
+          </li>
+          <li>
+            Jensen, F. B., Kuperman, W. A., Porter, M. B., &amp; Schmidt, H. (2011).
+            <em>Computational Ocean Acoustics</em> (2nd ed.).
+            Springer. ISBN 978-1-4419-8677-1.
+            <span class="ref-year">2011</span>
+            <em style="font-size:0.82rem;color:var(--text-soft);">[Referensi klasik, divalidasi ulang dalam literatur akustik kelautan kontemporer]</em>
+          </li>
+          <li>
+            Lurton, X. (2022).
+            <em>An Introduction to Underwater Acoustics: Principles and Applications</em> (3rd ed.).
+            Springer / Praxis Publishing.
+            <a href="https://doi.org/10.1007/978-3-030-99487-8" target="_blank">https://doi.org/10.1007/978-3-030-99487-8</a>
+            <span class="ref-year">2022</span>
+          </li>
+          <li>
+            Medwin, H., &amp; Clay, C. S. (2021).
+            <em>Fundamentals of Acoustical Oceanography.</em>
+            Academic Press / Elsevier (reissued digital edition). ISBN 978-0-12-487570-8.
+            <span class="ref-year">2021</span>
+          </li>
+          <li>
+            NOAA Ocean Acoustics Program. (2023).
+            <em>Ocean Noise Strategy: Charting the Course for Quieter Seas.</em>
+            National Oceanic and Atmospheric Administration.
+            <a href="https://www.fisheries.noaa.gov/national/endangered-species-conservation/ocean-noise" target="_blank">https://www.fisheries.noaa.gov</a>
+            <span class="ref-year">2023</span>
+          </li>
+          <li>
+            Van Moll, C. A. M., &amp; Binnerts, B. (2024).
+            Underwater sound propagation modelling for environmental impact assessment:
+            A review of current practices and future needs.
+            <em>Ocean Engineering, 295</em>, 116998.
+            <a href="https://doi.org/10.1016/j.oceaneng.2024.116998" target="_blank">https://doi.org/10.1016/j.oceaneng.2024.116998</a>
+            <span class="ref-year">2024</span>
+          </li>
+        </ol>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <p>AQILA WIDYA NINGRUM &middot; 08051382328107 &middot; WEBGIS</p>
+</footer>
+
+<!-- Scroll Reveal -->
+<script>
+  const els = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) {
+        setTimeout(function(){ e.target.classList.add('vis'); }, 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  els.forEach(function(el){ obs.observe(el); });
+</script>
+
+</body>
+</html>
